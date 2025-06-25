@@ -138,7 +138,7 @@ class PedidoItem extends Component
     }
 
     public function getVerificacao($idPedido, $itemCode, $codigo, $lineNum) {
-        $url = 'http://10.70.0.121:2501/api/Separacao/VerificaAlocacao';
+        $url = 'http://10.70.0.121:2501/api/Separacao/VerificaAlocacaoItemCode';
         $headers = [
             'Authorization' => 'Bearer VybrXPzUrlmxWV8ss513VtHZSmxLxcB7GfEpPGDLTGuwwMVdZU',
             'accept' => 'application/json',
@@ -151,6 +151,7 @@ class PedidoItem extends Component
         ];
 
         $post = Http::withHeaders($headers)->post($url, $body);
+
         return $post->json();
 
 
@@ -195,7 +196,13 @@ class PedidoItem extends Component
 
         $verificacao = $this->getVerificacao($item['id'], $item['raw']['itemcode'], $this->barcode, $item['raw']['linenum']);
 
+        
         if (isset($verificacao['Message']) && $verificacao['Message'] == 'O código de barras informado não foi localizado na lista de lotes disponíveis para este item.') {
+            $this->error($verificacao['Message'], position: 'toast-bottom', timeout: 6000);
+            return;
+        }
+
+        if (isset($verificacao['Message']) && $verificacao['Message'] == 'O Código de barra informado não corresponde ao código do item selecionado.') {
             $this->error($verificacao['Message'], position: 'toast-bottom', timeout: 6000);
             return;
         }
