@@ -73,9 +73,10 @@
                 $count = 0;
             @endphp
             <x-card>
+                
                 <div>
                     <p class="badge">Item Code: {{$lotesAlocar['dpItens']['ItemLote']}}</p>
-                    <p class="badge">Quantidade: {{$lotesAlocar['dpItens']['TotalLoteItem']}}</p>
+                    <p class="badge">Quantidade: {{$alocaItem['raw']['quantity']}}</p>
                 </div>
                 <x-table :headers="$headersAlocar" :rows="$lotesAlocar['lotes']">
                     @foreach ($lotesAlocar['lotes'] as $index => $item)
