@@ -196,7 +196,7 @@ class PedidoItem extends Component
 
         $verificacao = $this->getVerificacao($item['id'], $item['raw']['itemcode'], $this->barcode, $item['raw']['linenum']);
 
-        
+
         if (isset($verificacao['Message']) && $verificacao['Message'] == 'O código de barras informado não foi localizado na lista de lotes disponíveis para este item.') {
             $this->error($verificacao['Message'], position: 'toast-bottom', timeout: 6000);
             return;
@@ -242,10 +242,13 @@ class PedidoItem extends Component
         ];
 
 
+
         $post = \Http::withHeaders($headers)->post($url, $body);
         $resp = $post->json();
         $this->qtd = [];
-        $this->lotesAlocar = $this->getVerificacao($this->lotesAlocar['dpItens']['Pedido'], $this->lotesAlocar['dpItens']['ItemLote'], $this->lotesAlocar['lotes'][0]['Lote'], $this->lotesAlocar['dpItens']['LinhaItem']);
+
+        $this->lotesAlocar = $this->getVerificacao($this->lotesAlocar['dpItens']['Pedido'], $this->lotesAlocar['dpItens']['ItemLote'], $this->lotesAlocar['dpItens']['ItemLote'], $this->lotesAlocar['dpItens']['LinhaItem']);
+
         if (isset($resp['Message']) && $resp['Message'] == "Erro ao alocar Lote :-4014 - Cannot add row without complete selection of batch/serial numbers") {
             $this->error($resp['Message'], position: 'toast-bottom', timeout: 6000);
             return;
